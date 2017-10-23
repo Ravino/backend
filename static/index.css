@@ -1,0 +1,21 @@
+.page {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  min-width: 100vw;
+  min-height: 100vh;
+}
+
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  min-width: 100vw;
+  min-height: 100vh;
+}
+
+
+.center {
+  flex-basis: 50%;
+  text-align: center;
+}
