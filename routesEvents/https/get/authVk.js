@@ -1,11 +1,12 @@
 "use strict";
 
-module.exports = () => {
+module.exports = (passport) => {
 
   return {
     "route": "/auth/vk",
+    "middleware": passport.authenticate ("vkontakte", { "display": "mobile" }),
     "callback": (req, res) => {
-      res.send ("hello");
+      console.log ("auth/vk");
     }
   };
 };

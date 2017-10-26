@@ -7,9 +7,6 @@ module.exports = (db) => {
 
   const strategy = fnStrategy (db);
 
-  for (let i in strategy) {
-    passport.use ( i, strategy [i]);
-  }
-
+  passport.use (strategy.vk );
   return passport;
 };

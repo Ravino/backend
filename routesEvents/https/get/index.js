@@ -1,6 +1,5 @@
 "use strict";
 
-console.log(__dirname);
 module.exports = () => {
 
   return {

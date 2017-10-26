@@ -6,5 +6,7 @@ module.exports = (db) => {
 for (let i in profile) {
 console.log(i);
 }
+
+done ();
 };
 };

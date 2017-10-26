@@ -12,11 +12,13 @@ const recurseRoutes = (app, obj, method) => {
 
   for (let i in obj) {
 
-    if (obj [i].middleware) {
-      app [method] ( obj[i].route, obj[i].middleware, obj[i].callback);
+    if (obj [i].middleware ) {
+console.log (i);
+      app [method] ( obj [i].route, obj [i].middleware, obj [i].callback);
     }
 
     else {
+console.log (i);
       app [method] (obj[i].route, obj[i].callback);
     }
   }
