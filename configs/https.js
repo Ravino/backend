@@ -1,6 +1,7 @@
 "use strict";
 
 
+const helmet = require ("helmet");
 const cookieParser = require ("cookie-parser");
 const bodyParser = require ("./https/bodyParser.js");
 const expressSession = require ("./https/expressSession");
@@ -12,6 +13,8 @@ const serveStatic = require ("./https/serveStatic.js");
 module.exports = (redis) => {
 
   return {
+
+    "helmet": helmet (),
 
     "cookieParser": cookieParser (),
 

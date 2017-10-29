@@ -1,8 +1,9 @@
 "use strict";
 
 const verify = require ("./authVkRet/verify.js");
+const genTokCon = require ("./authVkRet/genTokCon.js");
 
-module.exports = (passport) => {
+module.exports = (passport, redis) => {
 
   return {
     "route": "/auth/vk/ret",
@@ -14,7 +15,7 @@ module.exports = (passport) => {
     "passport": passport.authenticate ("vkontakte", { "failureRedirect": "/auth/vk/error" }),
 
     "callback": (req, res) => {
-      res.send ("redirect");
+      genTokCon (res, redis);
     }
   };
 };

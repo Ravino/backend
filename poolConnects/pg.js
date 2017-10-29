@@ -4,9 +4,9 @@ const pgPool = require ("pg-pool");
 
 
 const conf = {
-  "database": "or",
-  "user": "or",
-  "password": "123",
+  "database": "odra",
+  "user": "odra",
+  "password": "odra",
   "ssl": true,
   "max": 20,
   "min": 4,

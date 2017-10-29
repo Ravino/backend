@@ -11,12 +11,18 @@ const Routes = require ("./routesEvents/https.js");
 const Passport = require ("./configs/passport.js");
 
 
-app.listen ( 3000);
+pg.connect (). then ( db => {
 
-const passport = Passport ();
-const config = Config (rds);
-const routes = Routes (passport, rds);
+  app.listen ( 3000);
+  const passport = Passport ();
+  const config = Config (rds);
+  const routes = Routes (passport, rds);
 
+  fn.recurseObj(app, config);
+  fn.recurseRoutes (app, routes.get, "get");
+},
 
-fn.recurseObj(app, config);
-fn.recurseRoutes (app, routes.get, "get");
+err => {
+  console.log (err);
+  return err;
+});
