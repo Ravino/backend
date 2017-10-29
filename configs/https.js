@@ -9,7 +9,7 @@ const serveStatic = require ("./https/serveStatic.js");
 
 
 
-module.exports = () => {
+module.exports = (redis) => {
 
   return {
 
@@ -17,7 +17,7 @@ module.exports = () => {
 
     "bodyParser": bodyParser (),
 
-    "expressSession": expressSession (),
+    "expressSession": expressSession (redis),
 
     "passport": passport (),
 

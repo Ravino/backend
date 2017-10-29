@@ -19,7 +19,7 @@ const config = {
 };
 
 
-module.exports = () => {
+module.exports = (redis) => {
 
   return expressSession (config);
 };
