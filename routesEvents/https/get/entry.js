@@ -1,11 +1,11 @@
 "use strict";
 
-const verify = require ("./index/verify.js");
+const verify = require ("./entry/verify.js");
 
 module.exports = () => {
 
   return {
-    "route": "/index",
+    "route": "/",
 
     "middleware": (req, res, next) => {
       verify (req, res, next);

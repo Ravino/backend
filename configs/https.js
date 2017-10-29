@@ -5,6 +5,8 @@ const cookieParser = require ("cookie-parser");
 const bodyParser = require ("./https/bodyParser.js");
 const expressSession = require ("./https/expressSession");
 const passport = require ("./https/passport.js");
+const serveStatic = require ("./https/serveStatic.js");
+
 
 
 module.exports = () => {
@@ -18,6 +20,8 @@ module.exports = () => {
     "expressSession": expressSession (),
 
     "passport": passport (),
+
+    "serveStatic": serveStatic (),
 
 
   }

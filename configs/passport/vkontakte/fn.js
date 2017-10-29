@@ -7,6 +7,6 @@ for (let i in profile) {
 console.log(i);
 }
 
-done ();
+done (null, { "user": "name" });
 };
 };
