@@ -12,7 +12,7 @@ module.exports = () => {
     },
 
     "callback": (req, res) => {
-      res.sendFile ("/www/project/backend/frontend/static/index.html");
+      res.sendFile ("/www/project/backend/frontend/private/index.html");
     }
   };
 };

@@ -3,10 +3,11 @@
 const server = require ("http").createServer ();
 const socketio = require ("socket.io") (server);
 
-const pg = require ("./poolConnects/pg.js");
-const ioredis = require ("./poolConnects/redis.js");
+const pg = require ("./poolConnects/pg.js") ();
+const ioredis = require ("./poolConnects/redis.js") ();
+const fn = require ("./fnServers/sockets.js") (); 
 
-server.listen (3000);
+server.listen (3001);
 
 
 
