@@ -1,5 +1,6 @@
 "use strict";
 
+const https = require ("https");
 const app = require ("express") ();
 const fn = require ("./fnServers/https.js") ();
 
@@ -11,9 +12,11 @@ const Routes = require ("./routesEvents/https.js");
 const Passport = require ("./configs/passport.js");
 
 
+const server = https.createServer (fn.getCert (), app);
+
 pg.connect (). then ( db => {
 
-  app.listen ( 3000);
+  server.listen (3000);
   const passport = Passport ();
   const config = Config (rds);
   const routes = Routes (passport, rds);
