@@ -17,7 +17,7 @@ const server = https.createServer (fn.getCert (), app);
 pg.connect (). then ( db => {
 
   server.listen (3000);
-  const passport = Passport ();
+  const passport = Passport (db, rds);
   const config = Config (rds);
   const routes = Routes (passport, rds);
 
