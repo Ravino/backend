@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = (db, redis) => {
+module.exports = (db, redis, publisher) => {
   return (access, refresh, params, profile, done) => {
 
     const userId = params.user_id;
@@ -9,6 +9,7 @@ module.exports = (db, redis) => {
 
     redis.hmset ("user:vk:" + userId, "params", Params, "profile", Profile).then (ret => {
       if (ret == "OK") {
+        publisher.publish ("socket:user:vk:id", userId);
         done (null, profile);
         return true;
       }
