@@ -4,5 +4,9 @@ const ioredis = require ("ioredis");
 
 
 module.exports = (conf) => {
-  return new ioredis ();
+  return {
+    "client": new ioredis (),
+    "pub": new ioredis (),
+    "sub": new ioredis (),
+  };
 };

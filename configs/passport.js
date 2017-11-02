@@ -6,9 +6,9 @@ const fnStrategy = require ("./passport/strategy.js");
 
 SerDeser (passport);
 
-module.exports = (db, redis, publisher) => {
+module.exports = (db, redis) => {
 
-  const strategy = fnStrategy (db, redis, publisher);
+  const strategy = fnStrategy (db, redis);
 
   passport.use (strategy.vk );
   return passport;

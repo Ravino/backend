@@ -1,19 +1,42 @@
 "use strict";
 
+const jwt = require ("jsonwebtoken");
+const fs = require ("fs");
+const certKey = fs.readFileSync ("/www/project/backend/sertificat/jwt/ws.key");
+
 const authenticate = (req, next) => {
 
-  let token;
-  let handshake;
-
-  if (req.handshake && req.handshake.query) {
-    handshake = req.handshake;
+  if (!req.handshake && req.handshake.query) {
+    console.log ("error in connect");
+    return next (false);
   }
 
-  if (handshake.query.tokcon) {
-    token = handshake.query.tokcon;
+  const handshake = req.handshake;
+
+  if (!handshake.query.tokcon) {
+    console.log ("error! Tokcon not found!");
+    return next (false);
   }
 
-  console.log (token);
+  const token = String (handshake.query.tokcon);
+
+  redis.get (token).then ( ret => {
+    if (ret == "1") {
+      redis.set (token, "0");
+      return next ();
+    }
+
+    jwt.verify (token, certKey, { "algorithm": "RC512"}, (err, verify) => {
+
+      if (err) {
+        console.log (err);
+        return next (err);
+      }
+
+      next ();
+    });
+
+  });
 };
 
 module.exports = authenticate;

@@ -6,7 +6,7 @@ const token = crypto.createHash ("sha512").update (Math.random () + "wsConnect")
 
 module.exports = (res, redis) => {
 
-  redis.hset ("token:connect:ws", token, "1"). then ( ret => {
+  redis.client.hset ("token:connect:ws", token, "1"). then ( ret => {
     if (ret == 1) {
       res.redirect ("/?tokcon=" + token);
       return true;

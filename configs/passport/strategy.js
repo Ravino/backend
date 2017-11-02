@@ -1,8 +1,8 @@
 "use strict";
 
 
-module.exports = (db, redis, publisher) => {
+module.exports = (db, redis) => {
   return {
-    "vk": require ("./vkontakte.js") (db, redis, publisher),
+    "vk": require ("./vkontakte.js") (db, redis),
   };
 };
