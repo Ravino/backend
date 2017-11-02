@@ -18,9 +18,9 @@ server.listen (3001);
 
 rds.sub.psubscribe ("socket:user:vk:id", () => {});
 
-//socketio.use ( (req, next) => {
-//  fn.authenticate (req, next);
-//});
+socketio.use ( (req, next) => {
+  fn.authenticate (req, next);
+});
 
 
 

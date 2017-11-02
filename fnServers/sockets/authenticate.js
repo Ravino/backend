@@ -7,15 +7,17 @@ const certKey = fs.readFileSync ("/www/project/backend/sertificat/jwt/ws.key");
 const authenticate = (req, next) => {
 
   if (!req.handshake && req.handshake.query) {
-    console.log ("error in connect");
-    return next (false);
+    const error = "error in connect!";
+    console.log (error);
+    return next (error);
   }
 
   const handshake = req.handshake;
 
   if (!handshake.query.tokcon) {
-    console.log ("error! Tokcon not found!");
-    return next (false);
+    const error = "error! Tokcon not found!";
+    console.log (error);
+    return next (error);
   }
 
   const token = String (handshake.query.tokcon);
