@@ -2,7 +2,6 @@
 
 module.exports = (db, redis) => {
 
-  redis.sub.psubscribe ("socket:user:vk:connection");
 
   return (access, refresh, params, profile, done) => {
 
@@ -10,25 +9,33 @@ module.exports = (db, redis) => {
     const Params = JSON.stringify (params);
     const Profile = JSON.stringify (profile);
 
-    redis.client.hmset ("user:vk:" + userId, "params", Params, "profile", Profile).then (ret => {
-      if (ret == "OK") {
 
-        redis.sub.on ("pmessage", (pat, chan, msg) => {
+    redis.client.hmset ("user:vk:" + userId, "params", Params, "profile", Profile).then ( res => {
 
-console.log ("socket send connect");
-          if (msg == "connection") {
-              redis.pub.publish ("socket:user:vk:id", userId);
-              return true;
+      if (res == "OK") {
+
+
+        redis.sub.on ("pmessage", (pattern, chanal, msg) => {
+
+          if (chanal == "socket:user:vk:connect"  &&  msg == "connect") {
+            redis.pub.publish ("socket:user:vk:connect", userId);
+            return true;
           }
+
+          console.log ("error! User not connected userVkId = " + userId);
+          return false;
         });
 
-        done (null, profile);
-        return true;
+      done (null, profile);
+      return true;
       }
 
-      const err = "error auth from vk and redis";
-      done (err, false);
+
+      done (null, false);
+      console.log ("error! User not writed in redis! UserVkId = " + userId);
       return false;
     });
+
+
   };
 };
