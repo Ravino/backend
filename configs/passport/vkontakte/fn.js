@@ -12,30 +12,27 @@ module.exports = (db, redis) => {
 
     redis.client.hmset ("user:vk:" + userId, "params", Params, "profile", Profile).then ( res => {
 
-      if (res == "OK") {
+      if ("OK" == res) {
+        const user = {
+          "userVkId": userId,
+          "params": params,
+          "profile": profile,
+        };
 
-
-        redis.sub.on ("pmessage", (pattern, chanal, msg) => {
-
-          if (chanal == "socket:user:vk:connect"  &&  msg == "connect") {
-            redis.pub.publish ("socket:user:vk:connect", userId);
-            return true;
-          }
-
-          console.log ("error! User not connected userVkId = " + userId);
-          return false;
-        });
-
-      done (null, profile);
-      return true;
+        done (null, user);
+        return true;
       }
 
-
+console.log ("error! User added in redis");
       done (null, false);
-      console.log ("error! User not writed in redis! UserVkId = " + userId);
       return false;
-    });
+    },
 
+    error => {
+      console.log (error);
+      done (error, false);
+      return error;
+    });
 
   };
 };

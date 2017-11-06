@@ -15,7 +15,7 @@ module.exports = (passport, redis) => {
     "passport": passport.authenticate ("vkontakte", { "failureRedirect": "/auth/vk/error" }),
 
     "callback": (req, res) => {
-      genTokCon (res, redis);
+      genTokCon (req, res, redis);
     }
   };
 };
