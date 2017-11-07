@@ -4,40 +4,72 @@ const jwt = require ("jsonwebtoken");
 const fs = require ("fs");
 const certKey = fs.readFileSync ("/www/project/backend/sertificat/jwt/ws.key");
 
-const authenticate = (req, next) => {
+const patternToken = /^[A-z0-9]{64,}$/;
+const patternId = /^[0-9]{1,}$/;
 
-  if (!req.handshake && req.handshake.query) {
-    const error = "error in connect!";
+
+const authenticate = (req, next, redis, usersSockets) => {
+
+  if (!req.handshake  &&  !req.handshake.query) {
+    const error = "Error! Cannot read propertys 'req.handshake' and 'req.handshake.query'";
     console.log (error);
-    return next (error);
+    next (error);
+    return error;
   }
+
+
+  if (!req.handshake.query.tokcon  &&  patternToken.test (req.handshake.query.tokcon) == false) {
+    const error = "Error! Propertys 'tokcon' invalid!";
+    console.log (error);
+    return error;
+  }
+
 
   const handshake = req.handshake;
+  const token = handshake.query.tokcon;
+  const socketId = req.id;
 
-  if (!handshake.query.tokcon) {
-    const error = "error! Tokcon not found!";
-    console.log (error);
-    return next (error);
-  }
 
-  const token = String (handshake.query.tokcon);
-
-  redis.get (token).then ( ret => {
-    if (ret == "1") {
-      redis.set (token, "0");
-      return next ();
+  redis.client.get ("token:connect:ws:" + token). then ( userId => {
+    if (!userId  && patternId.test (userId) == false) {
+      const error = "Error! UserId undefined!";
+      console.log (error);
+      next (error);
+      return error;
     }
 
-    jwt.verify (token, certKey, { "algorithm": "RC512"}, (err, verify) => {
 
-      if (err) {
-        console.log (err);
-        return next (err);
+    redis.client.hmget ("user:vk:" + userId, "params", "profile"). then ( userData => {
+      if (!userData  &&  !userData [0]  &&  !userData [1]) {
+        const error = "Error! UserData not found in nosql!";
+        console.log (error);
+        next (error);
+        return error;
       }
 
-      next ();
-    });
 
+      const user = {
+        "params": JSON.parse (userData [0]),
+        "profile": JSON.parse (userData [1])
+      };
+
+      usersSockets [socketId] = user;
+      next ();
+      return true;
+    },
+
+    error => {
+      console.log (error);
+      next (error);
+      return error;
+    });
+  },
+
+
+  error => {
+    console.log (error);
+    next (error);
+    return error;
   });
 };
 

@@ -3,7 +3,15 @@
 module.exports = (db, redis) => {
 
 
-  return (access, refresh, params, profile, done) => {
+  return (ACCESS, REFRESH, PARAMS, PROFILE, done) => {
+
+    const vkToken = {
+      "access": ACCESS,
+      "refresh": REFRESH
+    };
+
+    const params = Object.assign (PARAMS, vkToken);
+    const profile = Object.assign (PROFILE);
 
     const userId = params.user_id;
     const Params = JSON.stringify (params);
