@@ -1,25 +1,23 @@
 "use strict";
 
 const expressSession = require ("express-session");
-const storeRedis = require ("./expressSession/storeRedis.js");
+const store = require ("connect-redis") (expressSession);
 
 
 module.exports = (redis) => {
 
-  const config = {
+  const conf = {
+    "store": new store ({
+      "client": redis. client,
+      "prefix": "session-express-redis",
+    }),
 
-    "store": storeRedis (expressSession, redis),  
-
-    "secret": "myFuck",
-
+    "secret": "my fuck",
     "resave": true,
-
     "rolling": true,
-
-    "saveUninitialized": true
-
+    "saveUninitialized": true,
   };
 
 
-  return expressSession (config);
+  return expressSession (conf);
 };

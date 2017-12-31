@@ -3,5 +3,5 @@
 const serveStatic = require ("serve-static");
 
 module.exports = () => {
-  return serveStatic ("/www/project/backend/frontend");
+  return serveStatic ("/www/newProject/staticOnRegister");
 };

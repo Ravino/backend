@@ -1,35 +1,34 @@
 "use strict";
 
-const https = require ("https");
-const app = require ("express") ();
-const fn = require ("./fnServers/https.js") ();
+const secureServer = require ("https");
+const server = require ("express") ();
 
-const pg = require ("./poolConnects/pg.js") ();
-const rds = require ("./poolConnects/redis.js") ();
+const redis = require ("./connectionsPool/redis.js") ();
+const pg = require ("./connectionsPool/pg.js") ();
+const fnServer = require ("./fnServers/https.js") ();
+const logger = require ("./configs/logger.js") ();
 
+const serverConfig = require ("./configs/https.js") (redis);
 
-const Config = require ("./configs/https.js");
-const Routes = require ("./routesEvents/https.js");
 const Passport = require ("./configs/passport.js");
+const Routes = require ("./routesEvents/https.js");
 
 
-const server = https.createServer (fn.getCert (), app);
+pg. connect (). then ( db => {
 
-pg.connect (). then ( db => {
+  const passport = Passport (db, redis);
+  const routes = Routes (passport, redis);
 
 
-  rds.sub.psubscribe ("socket:user:*");
+  fnServer. recurseObj (server, serverConfig);
+  fnServer. recurseRoutes (server, routes. get, "get");
 
-  server.listen (3000);
-  const passport = Passport (db, rds);
-  const config = Config (rds);
-  const routes = Routes (passport, rds);
-
-  fn.recurseObj(app, config);
-  fn.recurseRoutes (app, routes.get, "get");
+  server.listen (3000, (r) => {
+    logger. info ("server-http start");
+  });
 },
 
 err => {
-  console.log (err);
-  return err;
+  logger. info (err);
 });
+
