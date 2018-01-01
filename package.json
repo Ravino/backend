@@ -24,6 +24,7 @@
     "nodemon": "^1.14.3",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
+    "passport-oauth2": "^1.4.0",
     "passport-odnoklassniki": "^0.2.0",
     "passport-vkontakte": "^0.3.2",
     "pg": "^7.3.0",

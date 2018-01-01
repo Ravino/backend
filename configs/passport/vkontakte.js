@@ -6,6 +6,6 @@ const fn = require ("./vkontakte/fn.js");
 
 
 
-module.exports = (db, redis) => {
+module.exports = (db, redis, logger, errorer) => {
   return new vk (conf (), fn (db, redis));
 };

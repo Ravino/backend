@@ -1,46 +1,46 @@
 "use strict";
 
-module.exports = (db, redis) => {
+const crypto = require ("crypto");
+
+module.exports = (db, redis, logger, errorer) => {
 
 
-  return (ACCESS, REFRESH, PARAMS, PROFILE, done) => {
+  return (access, refresh, params, profile, done) => {
 
-    const vkToken = {
-      "access": ACCESS,
-      "refresh": REFRESH
+    const userId = params. user_id;
+    const expiresIn = new Date (). getTime () + (params. expires_in * 1000);
+    const userSignature = crypto. createHash ("sha512"). update (new Date (). getTime () + userId + Math. random () + "signature"). digest ("hex");
+
+    const extendsParams = {
+      "userId": userId,
+     "expiresIn": expiresIn,
+     "accessKey": params. access_token,
+     "userSignature": userSignature,
     };
 
-    const params = Object.assign (PARAMS, vkToken);
-    const profile = Object.assign (PROFILE);
 
-    const userId = params.user_id;
-    const Params = JSON.stringify (params);
-    const Profile = JSON.stringify (profile);
+    const user = {
+      "params": extendsParams,
+      "profile": profile,
+    };
 
 
-    redis.client.hmset ("user:vk:" + userId, "params", Params, "profile", Profile).then ( res => {
+    const userString = JSON. stringify (user);
 
-      if ("OK" == res) {
-        const user = {
-          "userVkId": userId,
-          "params": params,
-          "profile": profile,
-        };
 
-        done (null, user);
-        return true;
+    redis. client. set ("https:users:vk:" + userId, userString). then ( result => {
+      if (result == "OK") {
+        return done (null, user);
       }
 
-console.log ("error! User added in redis");
-      done (null, false);
-      return false;
+      logger. error (errorer. redisSet ("Passport-vkontakte"));
+      return done (null, false);
     },
 
-    error => {
-      console.log (error);
-      done (error, false);
-      return error;
+    err => {
+      logger. error (err);
+      done (err);
+      return err;
     });
-
   };
 };

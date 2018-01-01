@@ -3,8 +3,8 @@
 
 const scopeds = [
   "notify",
-//  "wall",
-//  "messages",
+  "wall",
+  "messages",
   "friends",
   "offline",
   "status",

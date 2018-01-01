@@ -1,15 +1,18 @@
 "use strict";
 
 const passport = require ("passport");
-const SerDeser = require ("./passport/serDeser.js");
-const fnStrategy = require ("./passport/strategy.js");
+const strategy = require ("./passport/strategy.js");
 
-SerDeser (passport);
+const serDeserUser = require ("./passport/serDeserUser.js") (passport);
 
-module.exports = (db, redis) => {
 
-  const strategy = fnStrategy (db, redis);
+module. exports = (db, redis, logger, errorer) => {
 
-  passport.use (strategy.vk );
+  const strategyObj = strategy (db, redis, logger, errorer);
+
+  for (let i in strategyObj) {
+    passport. use (strategyObj [i]);
+  }
+
   return passport;
 };
